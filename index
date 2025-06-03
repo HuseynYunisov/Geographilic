@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Bookstore Café - Multi Section Site</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0; padding: 0;
+    background: #f5f5f5;
+    color: #333;
+  }
+  nav {
+    background: #2563eb;
+    padding: 12px 20px;
+  }
+  nav a {
+    color: white;
+    margin-right: 20px;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  nav a:hover, nav a.active {
+    text-decoration: underline;
+  }
+  main {
+    max-width: 1000px;
+    margin: 20px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  }
+  section {
+    display: none;
+  }
+  section.active {
+    display: block;
+  }
+  h1, h2 {
+    color: #1d4ed8;
+  }
+  /* --- Books Section --- */
+  .search-filter {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  input[type="text"], select {
+    padding: 8px;
+    font-size: 1rem;
+  }
+  .book-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(250px,1fr));
+    gap: 15px;
+  }
+  .book-card {
+    background: #fafafa;
+    border-radius: 6px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .book-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  .book-author {
+    font-style: italic;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    color: #555;
+  }
+  .book-desc {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 10px;
+    flex-grow: 1;
+  }
+  .book-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .badge {
+    background: #3b82f6;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+  }
+  button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  button:disabled {
+    background: #aaa;
+    cursor: not-allowed;
+  }
+  @media (max-width: 600px) {
+    .search-filter {
+      flex-direction: column;
+    }
+  }
+
+  /* Events Section */
+  .event-list {
+    list-style: none;
+    padding-left: 0;
+  }
+  .event-list li {
+    background: #eef6ff;
+    margin-bottom: 10px;
+    padding: 15px;
+    border-radius: 6px;
+  }
+  .event-date {
+    font-weight: bold;
+    color: #1d4ed8;
+  }
+
+  /* Members Section */
+  .member-news {
+    background: #fef9c3;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+  }
+
+  /* Menu Section */
+  .menu-list {
+    list-style: none;
+    padding-left: 0;
+  }
+  .menu-list li {
+    display: flex;
+    justify-content: space-between;
+    background: #f9fafb;
+    margin-bottom: 8px;
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-weight: bold;
+  }
+  .menu-list li span.price {
+    font-weight: normal;
+    color: #2563eb;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" data-section="dashboard" class="active">Dashboard</a>
+  <a href="#" data-section="books">Books</a>
+  <a href="#" data-section="events">Events</a>
+  <a href="#" data-section="members">Members</a>
+  <a href="#" data-section="menu">Menu</a>
+</nav>
+
+<main>
+  <!-- Dashboard -->
+  <section id="dashboard" class="active">
+    <h1>Welcome to Bookstore Café</h1>
+    <div class="announcement">
+      <h2>Announcements</h2>
+      <ul>
+        <li>New summer book arrivals now available!</li>
+        <li>Join our monthly book club every first Saturday.</li>
+        <li>COVID-19 safety measures remain in place.</li>
+      </ul>
+    </div>
+    <div class="highlight">
+      <h2>Highlights</h2>
+      <p>Staff picks: "The Great Gatsby" and "Clean Code" - check them out!</p>
+    </div>
+  </section>
+
+  <!-- Books -->
+  <section id="books">
+    <h1>Book Collection</h1>
+    <p>Discover your next favorite read from our carefully curated collection.</p>
+    <div class="search-filter">
+      <input type="text" id="searchInput" placeholder="Search books or authors..." />
+      <select id="genreSelect">
+        <option value="all">All Genres</option>
+      </select>
+    </div>
+    <div id="booksContainer" class="book-list"></div>
+  </section>
+
+  <!-- Events -->
+  <section id="events">
+    <h1>Upcoming Events</h1>
+    <ul class="event-list" id="eventList"></ul>
+  </section>
+
+  <!-- Members -->
+  <section id="members">
+    <h1>Members</h1>
+    <div class="member-news">
+      <h2>Community News</h2>
+      <p>Join our members-only book exchange every last Friday of the month.</p>
+    </div>
+    <div class="member-news">
+      <h2>Member Benefits</h2>
+      <ul>
+        <li>10% off all café purchases</li>
+        <li>Exclusive invites to author signings</li>
+        <li>Early access to event tickets</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Menu -->
+  <section id="menu">
+    <h1>Café Menu</h1>
+    <ul class="menu-list" id="menuList"></ul>
+  </section>
+</main>
+
+<script>
+  // Navigation logic
+  const navLinks = document.querySelectorAll('nav a');
+  const sections = document.querySelectorAll('main section');
+
+  navLinks.forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = e.target.getAttribute('data-section');
+
+      navLinks.forEach(l => l.classList.remove('active'));
+      e.target.classList.add('active');
+
+      sections.forEach(sec => {
+        sec.classList.toggle('active', sec.id === target);
+      });
+    });
+  });
+
+  // Data for Books
+  const books = [
+    {id:1,title:"The Great Gatsby",author:"F. Scott Fitzgerald",description:"A novel about the American dream and tragedy.",genre:"Classic",price:10.99,stock:5,featured:true},
+    {id:2,title:"1984",author:"George Orwell",description:"Dystopian novel set in a totalitarian future.",genre:"Science Fiction",price:8.99,stock:0,featured:false},
+    {id:3,title:"To Kill a Mockingbird",author:"Harper Lee",description:"Story of racial injustice and moral growth.",genre:"Classic",price:12.5,stock:7,featured:true},
+    {id:4,title:"Clean Code",author:"Robert C. Martin",description:"A Handbook of Agile Software Craftsmanship.",genre:"Programming",price:32.99,stock:10,featured:false},
+  ];
+
+  // Populate genre filter
+  const genreSelect = document.getElementById('genreSelect');
+  const uniqueGenres = [...new Set(books.map(b => b.genre))];
+  uniqueGenres.forEach(genre => {
+    const opt = document.createElement('option');
+    opt.value = genre;
+    opt.textContent = genre;
+    genreSelect.appendChild(opt);
+  });
+
+  // Render books
+  const booksContainer = document.getElementById('booksContainer');
+  const searchInput = document.getElementById('searchInput');
+
+  function renderBooks() {
+    const searchTerm = searchInput.value.toLowerCase();
+    const selectedGenre = genreSelect.value;
+
+    const filteredBooks = books.filter(book => {
+      const matchesSearch = book.title.toLowerCase().includes(searchTerm) || book.author.toLowerCase().includes(searchTerm);
+      const matchesGenre = selectedGenre === "all" || book.genre === selectedGenre;
+      return matchesSearch && matchesGenre;
+    });
+
+    booksContainer.innerHTML = "";
+
+    if (filteredBooks.length === 0) {
+      booksContainer.innerHTML = "<p>No books found. Try adjusting your search or filter.</p>";
+      return;
+    }
+
+    filteredBooks.forEach(book => {
+      const card = document.createElement('div');
+      card.className = 'book-card';
+
+      card.innerHTML = `
+        <div>
+          <div class="book-title">${book.title}</div>
+          <div class="book-author">by ${book.author}</div>
+          <div class="book-desc">${book.description}</div>
+        </div>
+        <div class="book-footer">
+          <div class="badge">${book.genre}</div>
+          <div>
+            $${book.price.toFixed(2)} 
+            <button ${book.stock === 0 ? "disabled" : ""}>
+              ${book.stock === 0 ? "Unavailable" : "Add to Cart"}
+            </button>
+          </div>
+        </div>
+      `;
+
+      booksContainer.appendChild(card);
+    });
+  }
+
+  searchInput.addEventListener('input', renderBooks);
+  genreSelect.addEventListener('change', renderBooks);
+
+  renderBooks();
+
+  // Events data and render
+  const events = [
+    {id:1,title:"Monthly Book Club",date:"2025-06-07",description:"Join fellow book lovers for discussion and fun."},
+    {id:2,title:"Author Signing: John Doe",date:"2025-06-15",description:"Meet John Doe and get your book signed."},
+    {id:3,title:"Poetry Night",date:"2025-06-22",description:"An evening of live poetry readings."},
+  ];
+
+  const eventList = document.getElementById('eventList');
+  events.forEach(ev => {
+    const li = document.createElement('li');
+    li.innerHTML = `<div class="event-date">${ev.date}</div><strong>${ev.title}</strong><p>${ev.description}</p>`;
+    eventList.appendChild(li);
+  });
+
+  // Menu data and render
+  const menuItems = [
+    {name:"Espresso",price:"$3.00"},
+    {name:"Cappuccino",price:"$4.50"},
+    {name:"Latte",price:"$4.00"},
+    {name:"Blueberry Muffin",price:"$2.50"},
+    {name:"Ham & Cheese Sandwich",price:"$5.00"},
+  ];
+
+  const menuList = document.getElementById('menuList');
+  menuItems.forEach(item => {
+    const li = document.createElement('li');
+    li.innerHTML = `${item.name} <span class="price">${item.price}</span>`;
+    menuList.appendChild(li);
+  });
+</script>
+
+</body>
+</html>
